@@ -2,6 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const { sequelize } = require('./config/db.config');
 const authRoutes = require('./routes/authRoute');
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER, // Gmail của bạn
+    pass: process.env.EMAIL_APP_PASSWORD // App Password từ Gmail
+  }
+});
 
 const app = express();
 const PORT = process.env.PORT || 5001;
