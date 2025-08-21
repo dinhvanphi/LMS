@@ -36,8 +36,8 @@ async function startServer() {
     
     // Sync database (in development)
     if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ alter: true });
-      console.log('Database synced');
+      await sequelize.sync({ force: true });
+      console.log('Database synced (force rebuild)');
     }
     
     app.listen(PORT, () => {
