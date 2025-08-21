@@ -1,49 +1,45 @@
 require('dotenv').config();
 const express = require('express');
-const cors = require('cors');
-const { sequelize } = require('./models');
-
-// Import routes
-const teacherRoutes = require('./routes/teacher.routes');
-const courseRoutes = require('./routes/course.routes');
-const assignmentRoutes = require('./routes/assignment.routes');
+const { sequelize } = require('./config/db.config');
+const authRoutes = require('./routes/authRoute');
 
 const app = express();
 const PORT = process.env.PORT || 5002;
 
-// Middlewares
-app.use(cors());
+// Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/api/teachers', teacherRoutes);
-app.use('/api/courses', courseRoutes);
-app.use('/api/assignments', assignmentRoutes);
+app.use('/api/auth', authRoutes);
 
-// Root route
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Edvora LMS API' });
-});
-
-// Start server
+// Test database connection và sync
 async function startServer() {
   try {
     await sequelize.authenticate();
-    console.log('Database connection has been established successfully.');
+    console.log('✓ Kết nối database thành công!');
     
-    // Sync database (in development)
-    if (process.env.NODE_ENV === 'development') {
-      await sequelize.sync({ force: true });
-      console.log('Database synced (force rebuild)');
-    }
+    await sequelize.sync();
+    console.log('✓ Database sync thành công!');
     
     app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log(`🚀 Server đang chạy trên http://localhost:${PORT}`);
+      console.log(`📝 API Register: POST http://localhost:${PORT}/api/auth/register`);
     });
+    
   } catch (error) {
-    console.error('Unable to connect to the database:', error);
+    console.error('❌ Không thể kết nối database:', error);
+    process.exit(1);
   }
 }
+
+// Routes
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Student API đang hoạt động!',
+    endpoints: {
+      register: 'POST /api/auth/register'
+    }
+  });
+});
 
 startServer();
