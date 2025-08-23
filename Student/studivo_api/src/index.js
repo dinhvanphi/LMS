@@ -31,6 +31,8 @@ async function startServer() {
     
     app.listen(PORT, () => {
       console.log(`🚀 Server đang chạy trên http://localhost:${PORT}`);
+      console.log(`📧 API Send OTP: POST http://localhost:${PORT}/api/auth/send-otp`);
+      console.log(`🔐 API Verify OTP: POST http://localhost:${PORT}/api/auth/verify-otp`);
       console.log(`📝 API Register: POST http://localhost:${PORT}/api/auth/register`);
     });
     
@@ -45,6 +47,8 @@ app.get('/', (req, res) => {
   res.json({ 
     message: 'Student API đang hoạt động!',
     endpoints: {
+      sendOTP: 'POST /api/auth/send-otp',
+      verifyOTP: 'POST /api/auth/verify-otp',
       register: 'POST /api/auth/register'
     }
   });
