@@ -1,53 +1,53 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const { sequelize } = require('./config/db.config');
 const authRoutes = require('./routes/authRoute');
-const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: process.env.EMAIL_USER, // Gmail của bạn
-    pass: process.env.EMAIL_APP_PASSWORD // App Password từ Gmail
-  }
-});
 
 const app = express();
 const PORT = process.env.PORT || 5002;
 
-// Middleware
+// Middlewares
+app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
 
-// Test database connection và sync
+// Root route
+app.get('/', (req, res) => {
+  res.json({ 
+    message: 'Edvora LMS Teacher API đang hoạt động!',
+    endpoints: {
+      sendOTP: 'POST /api/auth/send-otp',
+      verifyOTP: 'POST /api/auth/verify-otp',
+      register: 'POST /api/auth/register'
+    }
+  });
+});
+
+// Start server
 async function startServer() {
   try {
     await sequelize.authenticate();
     console.log('✓ Kết nối database thành công!');
     
-    await sequelize.sync();
-    console.log('✓ Database sync thành công!');
+    // Sync database (in development)
+    if (process.env.NODE_ENV === 'development') {
+      await sequelize.sync({ force: true });
+      console.log('✓ Database synced (force rebuild)');
+    }
     
     app.listen(PORT, () => {
-      console.log(`🚀 Server đang chạy trên http://localhost:${PORT}`);
+      console.log(`🚀 Teacher API đang chạy trên http://localhost:${PORT}`);
+      console.log(`📧 API Send OTP: POST http://localhost:${PORT}/api/auth/send-otp`);
+      console.log(`🔐 API Verify OTP: POST http://localhost:${PORT}/api/auth/verify-otp`);
       console.log(`📝 API Register: POST http://localhost:${PORT}/api/auth/register`);
     });
-    
   } catch (error) {
     console.error('❌ Không thể kết nối database:', error);
-    process.exit(1);
   }
 }
-
-// Routes
-app.get('/', (req, res) => {
-  res.json({ 
-    message: 'Student API đang hoạt động!',
-    endpoints: {
-      register: 'POST /api/auth/register'
-    }
-  });
-});
 
 startServer();
