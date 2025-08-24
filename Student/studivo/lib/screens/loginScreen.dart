@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     controller: _emailController,
                     decoration: InputDecoration(
-                      hintText: 'Email 365',
+                      hintText: 'Email',
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       enabledBorder: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
@@ -179,7 +179,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       },
                       child: Text(
-                        'Bantuan ?',
+                        'Signup ?',
                         style: TextStyle(
                           color: Color(0xFFB23B3B),
                           fontSize: 14,

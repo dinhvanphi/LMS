@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'cevoe',
+                'STUDIVO',
                 style: TextStyle(
                   fontSize: 48,
                   fontWeight: FontWeight.w300,
