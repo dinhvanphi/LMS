@@ -65,7 +65,9 @@ const authController = {
 
   register: async (req, res) => {
     try {
-      const { email, password, first_name, last_name, phone } = req.body;
+      const { email, password, fullName, first_name, last_name, phone } = req.body;
+      
+      console.log('📥 Received registration data:', req.body);
       
       // Kiểm tra email đã tồn tại
       const existingUser = await User.findOne({ where: { email } });
@@ -76,29 +78,70 @@ const authController = {
       // Hash password
       const password_hash = await bcrypt.hash(password, 10);
       
+      // Xử lý tên: ưu tiên first_name/last_name, nếu không có thì split fullName
+      let firstName = first_name;
+      let lastName = last_name;
+      
+      if (!firstName && !lastName && fullName) {
+        const nameParts = fullName.trim().split(' ');
+        firstName = nameParts[0] || '';
+        lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0] || '';
+      }
+      
+      // Validate required fields
+      if (!firstName || !lastName) {
+        return res.status(400).json({ 
+          error: 'Tên và họ là bắt buộc',
+          details: 'fullName, first_name, hoặc last_name phải được cung cấp'
+        });
+      }
+      
+      console.log('📝 Creating user with:', {
+        email,
+        first_name: firstName,
+        last_name: lastName,
+        role: 'student'
+      });
+      
       // Tạo user mới
       const newUser = await User.create({
         email,
         password_hash,
-        first_name,
-        last_name,
-        phone,
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone || null,
         role: 'student'
       });
       
+      // Tạo JWT token
+      const token = jwt.sign(
+        { 
+          user_id: newUser.user_id, 
+          email: newUser.email,
+          role: newUser.role 
+        },
+        process.env.JWT_SECRET || 'default_secret',
+        { expiresIn: '7d' }
+      );
+      
       res.status(201).json({
         message: 'Đăng ký thành công',
+        token: token,
         user: {
           user_id: newUser.user_id,
           email: newUser.email,
           first_name: newUser.first_name,
-          last_name: newUser.last_name
+          last_name: newUser.last_name,
+          role: newUser.role
         }
       });
       
     } catch (error) {
       console.error('Lỗi đăng ký:', error);
-      res.status(500).json({ error: 'Lỗi server' });
+      res.status(500).json({ 
+        error: 'Lỗi server',
+        details: error.message 
+      });
     }
   }
 };
