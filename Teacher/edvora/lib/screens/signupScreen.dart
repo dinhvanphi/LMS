@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../services/api_service.dart';
+import 'otpScreen.dart';
 
 class SignupScreen extends StatefulWidget {
   @override
@@ -12,6 +14,7 @@ class _SignupScreenState extends State<SignupScreen> {
   final _confirmPasswordController = TextEditingController();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -188,23 +191,26 @@ class _SignupScreenState extends State<SignupScreen> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle signup
-                      },
+                      onPressed: _isLoading ? null : _handleSignup,
+
+
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFB23B3B),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
                       ),
-                      child: Text(
-                        'Create Account',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _isLoading
+                          ? CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              'Create Account',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+
                     ),
                   ),
                   SizedBox(height: 20),
@@ -236,6 +242,95 @@ class _SignupScreenState extends State<SignupScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Future<void> _handleSignup() async {
+    // Validation
+    if (_nameController.text.trim().isEmpty) {
+      _showErrorSnackBar('Please enter your full name');
+      return;
+    }
+
+    if (_emailController.text.trim().isEmpty) {
+      _showErrorSnackBar('Please enter your email');
+      return;
+    }
+
+    // Validate email format
+    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(_emailController.text.trim())) {
+      _showErrorSnackBar('Please enter a valid email address');
+      return;
+    }
+
+    if (_passwordController.text.isEmpty) {
+      _showErrorSnackBar('Please enter a password');
+      return;
+    }
+
+    if (_passwordController.text != _confirmPasswordController.text) {
+      _showErrorSnackBar('Passwords do not match');
+      return;
+    }
+
+    if (_passwordController.text.length < 6) {
+      _showErrorSnackBar('Password must be at least 6 characters');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      print('🔄 Starting signup process for: ${_emailController.text.trim()}');
+      
+      // Send OTP
+      final result = await ApiService.sendOtp(_emailController.text.trim());
+      
+      print('📋 Signup result: $result');
+      
+      if (result['success']) {
+        print('✅ OTP sent successfully');
+        // Navigate to OTP screen
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpScreen(
+              email: _emailController.text.trim(),
+              password: _passwordController.text,
+              fullName: _nameController.text.trim(),
+            ),
+          ),
+        );
+      } else {
+        print('❌ Failed to send OTP: ${result['data']}');
+        String errorMessage = 'Failed to send OTP';
+        
+        if (result['data'] != null && result['data']['message'] != null) {
+          errorMessage = result['data']['message'];
+        } else if (result['error'] != null) {
+          errorMessage = result['error'];
+        }
+        
+        _showErrorSnackBar(errorMessage);
+      }
+    } catch (e) {
+      print('❌ Exception in signup: $e');
+      _showErrorSnackBar('Network error: Please check your connection and try again');
+    }
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
       ),
     );
   }

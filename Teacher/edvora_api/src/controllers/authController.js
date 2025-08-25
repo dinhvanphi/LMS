@@ -1,11 +1,10 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-const Teacher = require('../models/teacherModel');
 const otpService = require('../services/otpService');
 
 const authController = {
-  // API gửi OTP cho giáo viên
+  // API gửi OTP
   sendOTP: async (req, res) => {
     try {
       const { email, first_name } = req.body;
@@ -24,7 +23,7 @@ const authController = {
       const result = await otpService.sendOTP(email, first_name);
       
       res.status(200).json({
-        message: 'OTP đã được gửi đến email của Thầy/Cô',
+        message: 'OTP đã được gửi đến email của bạn',
         email: email,
         expireTime: result.expireTime
       });
@@ -35,7 +34,7 @@ const authController = {
     }
   },
 
-  // API xác thực OTP cho giáo viên
+  // API xác thực OTP
   verifyOTP: async (req, res) => {
     try {
       const { email, otp } = req.body;
@@ -64,58 +63,86 @@ const authController = {
     }
   },
 
-  // API đăng ký giáo viên
   register: async (req, res) => {
     try {
-      const { 
-        email, 
-        password, 
-        first_name, 
-        last_name, 
-        phone, 
-        bio, 
-        qualifications, 
-        experience_years, 
-        expertise 
-      } = req.body;
+      const { email, password, fullName, first_name, last_name, phone } = req.body;
+      
+      console.log('📥 Received registration data:', req.body);
       
       // Kiểm tra email đã tồn tại
-      const existingTeacher = await Teacher.findOne({ where: { email } });
-      if (existingTeacher) {
+      const existingUser = await User.findOne({ where: { email } });
+      if (existingUser) {
         return res.status(400).json({ error: 'Email đã được sử dụng' });
       }
       
       // Hash password
       const password_hash = await bcrypt.hash(password, 10);
       
-      // Tạo giáo viên mới
-      const newTeacher = await Teacher.create({
+      // Xử lý tên: ưu tiên first_name/last_name, nếu không có thì split fullName
+      let firstName = first_name;
+      let lastName = last_name;
+      
+      if (!firstName && !lastName && fullName) {
+        const nameParts = fullName.trim().split(' ');
+        firstName = nameParts[0] || '';
+        lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : nameParts[0] || '';
+      }
+      
+      // Validate required fields
+      if (!firstName || !lastName) {
+        return res.status(400).json({ 
+          error: 'Tên và họ là bắt buộc',
+          details: 'fullName, first_name, hoặc last_name phải được cung cấp'
+        });
+      }
+      
+      console.log('📝 Creating user with:', {
         email,
-        password_hash,
-        first_name,
-        last_name,
-        phone,
-        bio,
-        qualifications,
-        experience_years: experience_years || 0,
-        expertise
+        first_name: firstName,
+        last_name: lastName,
+        role: 'instructor'
       });
       
+      // Tạo user mới
+      const newUser = await User.create({
+        email,
+        password_hash,
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone || null,
+        role: 'instructor',
+        is_active: true
+      });
+      
+      // Tạo JWT token
+      const token = jwt.sign(
+        { 
+          user_id: newUser.user_id, 
+          email: newUser.email,
+          role: newUser.role 
+        },
+        process.env.JWT_SECRET || 'default_secret',
+        { expiresIn: '7d' }
+      );
+      
       res.status(201).json({
-        message: 'Đăng ký tài khoản giáo viên thành công',
-        teacher: {
-          teacher_id: newTeacher.teacher_id,
-          email: newTeacher.email,
-          first_name: newTeacher.first_name,
-          last_name: newTeacher.last_name,
-          experience_years: newTeacher.experience_years,
-          is_verified: newTeacher.is_verified
+        message: 'Đăng ký thành công',
+        token: token,
+        user: {
+          user_id: newUser.user_id,
+          email: newUser.email,
+          first_name: newUser.first_name,
+          last_name: newUser.last_name,
+          role: newUser.role
         }
       });
       
     } catch (error) {
-      console.error('Lỗi đăng ký giáo viên:', error);
-      res.status(500).json({ error: 'Lỗi server' });
+      console.error('Lỗi đăng ký:', error);
+      res.status(500).json({ 
+        error: 'Lỗi server',
+        details: error.message 
+      });
     }
   }
 };

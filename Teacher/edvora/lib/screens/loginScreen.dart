@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'signupScreen.dart';
+import '../services/api_service.dart';
+import 'otpScreen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -9,7 +11,9 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   bool _obscurePassword = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +36,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     Color(0xFF8B2B2B),
                   ],
                 ),
-               
-
-                  image: DecorationImage(
-                    image: AssetImage('assets/building.jpeg'),
-                    fit: BoxFit.cover,
-                  ),
               ),
               child: Stack(
                 children: [
@@ -204,10 +202,20 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  void _showErrorSnackBar(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.red,
+      ),
+    );
+  }
+
   @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    _nameController.dispose();
     super.dispose();
   }
 }
