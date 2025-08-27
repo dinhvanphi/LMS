@@ -144,6 +144,76 @@ const authController = {
         details: error.message 
       });
     }
+  },
+
+  // API đăng nhập
+  login: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      
+      console.log('🔐 Login attempt for email:', email);
+      
+      // Validate input
+      if (!email || !password) {
+        return res.status(400).json({ error: 'Email và mật khẩu là bắt buộc' });
+      }
+      
+      // Kiểm tra email hợp lệ
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return res.status(400).json({ error: 'Email không hợp lệ' });
+      }
+      
+      // Tìm user theo email
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        return res.status(401).json({ error: 'Email hoặc mật khẩu không đúng' });
+      }
+      
+      // Kiểm tra tài khoản có hoạt động không
+      if (!user.is_active) {
+        return res.status(401).json({ error: 'Tài khoản đã bị vô hiệu hóa' });
+      }
+      
+      // Kiểm tra mật khẩu
+      const isPasswordValid = await bcrypt.compare(password, user.password_hash);
+      if (!isPasswordValid) {
+        return res.status(401).json({ error: 'Email hoặc mật khẩu không đúng' });
+      }
+      
+      // Tạo JWT token
+      const token = jwt.sign(
+        { 
+          user_id: user.user_id, 
+          email: user.email,
+          role: user.role 
+        },
+        process.env.JWT_SECRET || 'default_secret',
+        { expiresIn: '7d' }
+      );
+      
+      console.log('✅ Login successful for user:', user.user_id);
+      
+      res.status(200).json({
+        message: 'Đăng nhập thành công',
+        token: token,
+        user: {
+          user_id: user.user_id,
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          role: user.role,
+          phone: user.phone
+        }
+      });
+      
+    } catch (error) {
+      console.error('Lỗi đăng nhập:', error);
+      res.status(500).json({ 
+        error: 'Lỗi server',
+        details: error.message 
+      });
+    }
   }
 };
 

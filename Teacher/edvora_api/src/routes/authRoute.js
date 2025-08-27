@@ -10,5 +10,7 @@ router.post('/verify-otp', authController.verifyOTP);
 
 // API đăng ký giáo viên
 router.post('/register', authController.register);
+// API đăng nhập
+router.post('/login', authController.login);
 
 module.exports = router;

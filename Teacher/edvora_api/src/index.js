@@ -22,7 +22,8 @@ app.get('/', (req, res) => {
     endpoints: {
       sendOTP: 'POST /api/auth/send-otp',
       verifyOTP: 'POST /api/auth/verify-otp',
-      register: 'POST /api/auth/register'
+      register: 'POST /api/auth/register',
+      login: 'POST /api/auth/login'
     }
   });
 });
@@ -44,6 +45,7 @@ async function startServer() {
       console.log(`📧 API Send OTP: POST http://localhost:${PORT}/api/auth/send-otp`);
       console.log(`🔐 API Verify OTP: POST http://localhost:${PORT}/api/auth/verify-otp`);
       console.log(`📝 API Register: POST http://localhost:${PORT}/api/auth/register`);
+      console.log(`🔑 API Login: POST http://localhost:${PORT}/api/auth/login`);
     });
   } catch (error) {
     console.error('❌ Không thể kết nối database:', error);
