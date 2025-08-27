@@ -136,6 +136,55 @@ class ApiService {
     }
   }
 
+  // Login - Thêm method đăng nhập
+  static Future<Map<String, dynamic>> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      print('🔄 Logging in user: $email');
+      
+      final response = await http.post(
+        Uri.parse('$baseUrl/login'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      print('📋 Login Response Status: ${response.statusCode}');
+      print('📋 Login Response Body: ${response.body}');
+
+      final responseData = jsonDecode(response.body);
+      
+      // Lưu token và thông tin user nếu đăng nhập thành công
+      if (response.statusCode == 200 && responseData['data']['token'] != null) {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setString('auth_token', responseData['data']['token']);
+        await prefs.setString('user_email', email);
+        await prefs.setString('user_name', responseData['data']['user']['fullName']);
+        await prefs.setString('user_id', responseData['data']['user']['id'].toString());
+        await prefs.setString('user_role', responseData['data']['user']['role']);
+      }
+
+      return {
+        'success': response.statusCode == 200,
+        'data': responseData,
+        'statusCode': response.statusCode,
+      };
+    } catch (e) {
+      print('❌ Error in login: $e');
+      return {
+        'success': false,
+        'error': 'Network error: $e',
+        'statusCode': 0,
+      };
+    }
+  }
+
   // Logout
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
@@ -159,5 +208,16 @@ class ApiService {
   static Future<String?> getUserName() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_name');
+  }
+
+  // Get user info
+  static Future<String?> getUserId() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_id');
+  }
+
+  static Future<String?> getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('user_role');
   }
 }
