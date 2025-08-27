@@ -34,6 +34,7 @@ async function startServer() {
       console.log(`📧 API Send OTP: POST http://localhost:${PORT}/api/auth/send-otp`);
       console.log(`🔐 API Verify OTP: POST http://localhost:${PORT}/api/auth/verify-otp`);
       console.log(`📝 API Register: POST http://localhost:${PORT}/api/auth/register`);
+      console.log(`🔑 API Login: POST http://localhost:${PORT}/api/auth/login`);
     });
     
   } catch (error) {
