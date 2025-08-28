@@ -77,7 +77,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         child: Icon(
                           Icons.person_add,
                           size: 40,
-                          color: Color(0xFFB23B3B),
+                          color: Colors.blue[700],
                         ),
                       ),
                     ),
@@ -108,10 +108,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: 'Full Name',
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                     ),
                   ),
@@ -123,10 +123,10 @@ class _SignupScreenState extends State<SignupScreen> {
                       hintText: 'Email',
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -151,10 +151,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                       ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                     ),
                   ),
@@ -178,10 +178,10 @@ class _SignupScreenState extends State<SignupScreen> {
                         },
                       ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                     ),
                   ),
@@ -192,10 +192,8 @@ class _SignupScreenState extends State<SignupScreen> {
                     height: 50,
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _handleSignup,
-
-
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFB23B3B),
+                        backgroundColor: Colors.blue[700],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
@@ -223,7 +221,7 @@ class _SignupScreenState extends State<SignupScreen> {
                       child: Text(
                         'Already have an account? Login',
                         style: TextStyle(
-                          color: Color(0xFFB23B3B),
+                          color: Colors.blue[700],
                           fontSize: 14,
                         ),
                       ),

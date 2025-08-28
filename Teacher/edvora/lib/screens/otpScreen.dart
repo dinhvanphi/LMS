@@ -37,7 +37,7 @@ class _OtpScreenState extends State<OtpScreen> {
               height: 220,
               width: double.infinity,
               decoration: BoxDecoration(
-                color: Color(0xFFB23B3B),
+                color: Colors.blue[700],
               ),
               child: Stack(
                 children: [
@@ -86,7 +86,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         child: Icon(
                           Icons.mail_outline,
                           size: 40,
-                          color: Color(0xFFB23B3B),
+                          color: Colors.blue[700],
                         ),
                       ),
                     ),
@@ -122,7 +122,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
-                      color: Color(0xFFB23B3B),
+                      color: Colors.blue[700],
                     ),
                   ),
                   SizedBox(height: 40),
@@ -134,7 +134,7 @@ class _OtpScreenState extends State<OtpScreen> {
                         width: 45,
                         height: 55,
                         decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xFFB23B3B), width: 2),
+                          border: Border.all(color: Colors.blue[700]!, width: 2),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: TextField(
@@ -144,7 +144,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           style: TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFFB23B3B),
+                            color: Colors.blue[700],
                           ),
                           keyboardType: TextInputType.number,
                           maxLength: 1,
@@ -172,7 +172,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _verifyOtp,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFB23B3B),
+                        backgroundColor: Colors.blue[700],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
@@ -196,7 +196,7 @@ class _OtpScreenState extends State<OtpScreen> {
                     child: Text(
                       _isResending ? 'Resending...' : 'Resend OTP',
                       style: TextStyle(
-                        color: Color(0xFFB23B3B),
+                        color: Colors.blue[700],
                         fontSize: 14,
                         fontWeight: FontWeight.w600,
                       ),
@@ -315,7 +315,7 @@ class _OtpScreenState extends State<OtpScreen> {
               },
               child: Text(
                 'Go to Login',
-                style: TextStyle(color: Color(0xFFB23B3B)),
+                style: TextStyle(color: Colors.blue[700]),
               ),
             ),
           ],

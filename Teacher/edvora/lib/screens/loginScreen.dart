@@ -107,7 +107,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         width: 80,
                         height: 80,
                         decoration: BoxDecoration(
-                          color: Color(0xFFB23B3B),
+                          color: Colors.blue[700],
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
@@ -152,10 +152,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       hintText: 'Email',
                       hintStyle: TextStyle(color: Colors.grey[400]),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                     ),
                     keyboardType: TextInputType.emailAddress,
@@ -181,10 +181,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         },
                       ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                       focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFB23B3B), width: 2),
+                        borderSide: BorderSide(color: Colors.blue[700]!, width: 2),
                       ),
                     ),
                   ),
@@ -196,7 +196,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: ElevatedButton(
                       onPressed: _isLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xFFB23B3B),
+                        backgroundColor: Colors.blue[700],
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
@@ -246,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Text(
                         'Signup ?',
                         style: TextStyle(
-                          color: Color(0xFFB23B3B),
+                          color: Colors.blue[700],
                           fontSize: 14,
                         ),
                       ),

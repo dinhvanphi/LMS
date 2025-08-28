@@ -15,7 +15,7 @@ class _HomePageScreenState extends State<HomePageScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Trang Chủ - LMS Teacher',
+          'Edvora LMS',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -54,19 +54,11 @@ class _HomePageScreenState extends State<HomePageScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Chào mừng trở lại!',
+                    'Xin chào + tên giảng viên',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Hệ thống quản lý học tập dành cho giáo viên',
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Colors.white70,
                     ),
                   ),
                 ],
@@ -74,18 +66,6 @@ class _HomePageScreenState extends State<HomePageScreen> {
             ),
             
             const SizedBox(height: 24),
-            
-            // Tiêu đề menu chức năng
-            const Text(
-              'Chức năng chính',
-              style: TextStyle(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: Colors.black87,
-              ),
-            ),
-            
-            const SizedBox(height: 16),
             
             // Grid menu chức năng
             Expanded(
@@ -103,47 +83,56 @@ class _HomePageScreenState extends State<HomePageScreen> {
                     },
                   ),
                   _buildMenuCard(
-                    icon: Icons.people,
-                    title: 'Danh sách học sinh',
-                    color: Colors.orange,
+                    icon: Icons.add_circle,
+                    title: 'Tạo lớp học',
+                    color: Colors.blue,
                     onTap: () {
-                      // TODO: Navigate to student list
-                    },
-                  ),
-                  _buildMenuCard(
-                    icon: Icons.assignment,
-                    title: 'Bài tập',
-                    color: Colors.purple,
-                    onTap: () {
-                      // TODO: Navigate to assignments
-                    },
-                  ),
-                  _buildMenuCard(
-                    icon: Icons.grade,
-                    title: 'Điểm số',
-                    color: Colors.red,
-                    onTap: () {
-                      // TODO: Navigate to grades
-                    },
-                  ),
-                  _buildMenuCard(
-                    icon: Icons.schedule,
-                    title: 'Thời khóa biểu',
-                    color: Colors.teal,
-                    onTap: () {
-                      // TODO: Navigate to schedule
-                    },
-                  ),
-                  _buildMenuCard(
-                    icon: Icons.settings,
-                    title: 'Cài đặt',
-                    color: Colors.grey,
-                    onTap: () {
-                      // TODO: Navigate to settings
+                      // TODO: Navigate to create class
                     },
                   ),
                 ],
               ),
+            ),
+          ],
+        ),
+      ),
+      bottomNavigationBar: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.3),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: const Offset(0, -2),
+            ),
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            _buildBottomNavButton(
+              icon: Icons.folder,
+              label: 'My Source',
+              onTap: () {
+                // TODO: Navigate to My Source
+              },
+            ),
+            _buildBottomNavButton(
+              icon: Icons.home,
+              label: 'Home',
+              isSelected: true,
+              onTap: () {
+                // Already on home page
+              },
+            ),
+            _buildBottomNavButton(
+              icon: Icons.notifications,
+              label: 'Notifications',
+              onTap: () {
+                // TODO: Navigate to Notifications
+              },
             ),
           ],
         ),
@@ -191,6 +180,36 @@ class _HomePageScreenState extends State<HomePageScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildBottomNavButton({
+    required IconData icon,
+    required String label,
+    required VoidCallback onTap,
+    bool isSelected = false,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            icon,
+            color: isSelected ? Colors.blue[700] : Colors.grey,
+            size: 24,
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: isSelected ? Colors.blue[700] : Colors.grey,
+              fontSize: 12,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+            ),
+          ),
+        ],
       ),
     );
   }
