@@ -136,6 +136,47 @@ class ApiService {
     }
   }
 
+  // Login
+  static Future<Map<String, dynamic>> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      final response = await http.post(
+        Uri.parse('http://localhost:5002/api/auth/login'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+        }),
+      );
+
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+      if (response.statusCode == 200) {
+        // Đăng nhập thành công
+        return {
+          'success': true,
+          'data': responseData,
+          'message': 'Đăng nhập thành công'
+        };
+      } else {
+        // Đăng nhập thất bại
+        return {
+          'success': false,
+          'message': responseData['message'] ?? 'Đăng nhập thất bại'
+        };
+      }
+    } catch (e) {
+      return {
+        'success': false,
+        'message': 'Lỗi kết nối: ${e.toString()}'
+      };
+    }
+  }
+
   // Logout
   static Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();

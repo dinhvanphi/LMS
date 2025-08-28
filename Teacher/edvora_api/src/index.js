@@ -40,12 +40,12 @@ async function startServer() {
       console.log('✓ Database synced (force rebuild)');
     }
     
-    app.listen(PORT, () => {
-      console.log(`🚀 Teacher API đang chạy trên http://localhost:${PORT}`);
-      console.log(`📧 API Send OTP: POST http://localhost:${PORT}/api/auth/send-otp`);
-      console.log(`🔐 API Verify OTP: POST http://localhost:${PORT}/api/auth/verify-otp`);
-      console.log(`📝 API Register: POST http://localhost:${PORT}/api/auth/register`);
-      console.log(`🔑 API Login: POST http://localhost:${PORT}/api/auth/login`);
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Edvora API đang chạy trên http://0.0.0.0:${PORT}`);
+      console.log(`📧 API Send OTP: POST http://172.25.12.230:${PORT}/api/auth/send-otp`);
+      console.log(`🔐 API Verify OTP: POST http://172.25.12.230:${PORT}/api/auth/verify-otp`);
+      console.log(`📝 API Register: POST http://172.25.12.230:${PORT}/api/auth/register`);
+      console.log(`🔑 API Login: POST http://172.25.12.230:${PORT}/api/auth/login`);
     });
   } catch (error) {
     console.error('❌ Không thể kết nối database:', error);

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'signupScreen.dart';
 import '../services/api_service.dart';
-import 'otpScreen.dart';
+import 'homaPageScreen.dart';
 
 class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+  
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -14,6 +16,50 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _nameController = TextEditingController();
   bool _obscurePassword = true;
   bool _isLoading = false;
+
+  Future<void> _handleLogin() async {
+    // Validate input
+    if (_emailController.text.isEmpty || _passwordController.text.isEmpty) {
+      _showErrorSnackBar('Vui lòng nhập email và mật khẩu');
+      return;
+    }
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final result = await ApiService.login(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      );
+
+      if (result['success']) {
+        // Đăng nhập thành công - chuyển đến trang chủ
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePageScreen()),
+        );
+        
+        // Hiển thị thông báo thành công
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(result['message']),
+            backgroundColor: Colors.green,
+          ),
+        );
+      } else {
+        // Đăng nhập thất bại
+        _showErrorSnackBar(result['message']);
+      }
+    } catch (e) {
+      _showErrorSnackBar('Có lỗi xảy ra: ${e.toString()}');
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
               height: 280,
               width: double.infinity,
               decoration: BoxDecoration(
-                // Thay thế ảnh bằng gradient tạm thời
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -102,6 +147,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Email field
                   TextField(
                     controller: _emailController,
+                    enabled: !_isLoading,
                     decoration: InputDecoration(
                       hintText: 'Email',
                       hintStyle: TextStyle(color: Colors.grey[400]),
@@ -118,6 +164,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   // Password field
                   TextField(
                     controller: _passwordController,
+                    enabled: !_isLoading,
                     obscureText: _obscurePassword,
                     decoration: InputDecoration(
                       hintText: 'Password',
@@ -147,23 +194,43 @@ class _LoginScreenState extends State<LoginScreen> {
                     width: double.infinity,
                     height: 50,
                     child: ElevatedButton(
-                      onPressed: () {
-                        // Handle login
-                      },
+                      onPressed: _isLoading ? null : _handleLogin,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFB23B3B),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(25),
                         ),
                       ),
-                      child: Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: _isLoading
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                  ),
+                                ),
+                                SizedBox(width: 10),
+                                Text(
+                                  'Đang đăng nhập...',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Text(
+                              'Login',
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
                     ),
                   ),
                   SizedBox(height: 20),
