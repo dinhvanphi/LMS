@@ -8,7 +8,7 @@ Hệ thống quản lý học tập bao gồm 2 ứng dụng riêng biệt cho *
 - **Platform**: Flutter (iOS/Android)
 - **API Backend**: Node.js + Express + PostgreSQL
 - **Port**: 5002
-- **Màu chủ đạo**: Red (#B23B3B)
+- **Màu chủ đạo**: Blue (#2196F3)
 
 ### 2. **Student App - Studivo** 🎓
 - **Platform**: Flutter (iOS/Android) 
@@ -26,7 +26,8 @@ LMS/
 │       │   ├── screens/
 │       │   │   ├── loginScreen.dart
 │       │   │   ├── signupScreen.dart
-│       │   │   └── otpScreen.dart
+│       │   │   ├── otpScreen.dart
+│       │   │   └── homaPageScreen.dart
 │       │   └── services/
 │       │       └── api_service.dart
 │       └── pubspec.yaml
@@ -60,6 +61,7 @@ LMS/
 📧 Send OTP:     POST /api/auth/send-otp
 🔐 Verify OTP:   POST /api/auth/verify-otp  
 📝 Register:     POST /api/auth/register
+🚪 Logout:       POST /api/auth/logout
 ```
 
 ### **Student API (Studivo) - Port 5001**
@@ -125,57 +127,8 @@ dependencies:
 1. **📧 Send OTP**: Gửi mã OTP qua email
 2. **✅ Verify OTP**: Xác thực mã OTP
 3. **📝 Register**: Đăng ký tài khoản mới
-4. **🔐 Login**: Đăng nhập (đang phát triển)
+4. **🔐 Login**: Đăng nhập
+5. **🚪 Logout**: Đăng xuất an toàn
 
-### **UI/UX Features**
-- ✨ Material Design với custom theme
-- 🎨 Gradient backgrounds và custom shapes
-- 📱 Responsive design cho iOS/Android
-- 🔄 Loading states và error handling
-- 📧 OTP input với auto-focus
-
-## 🎯 Roadmap
-
-### **Phase 1 - Authentication** ✅
-- [x] OTP-based registration
-- [x] Email verification
-- [x] User management
-
-### **Phase 2 - Core Features** 🔄
-- [ ] Login functionality
-- [ ] Password reset
-- [ ] Profile management
-- [ ] Dashboard
-
-### **Phase 3 - Learning Features** 📅
-- [ ] Course management (Teacher)
-- [ ] Course enrollment (Student)  
-- [ ] Assignments & Grades
-- [ ] Real-time notifications
-
-## 🛡️ Security
-
-- 🔐 OTP-based email verification
-- 🔑 JWT token authentication
-- 🛡️ Input validation và sanitization
-- 🚫 CORS protection
-- 🔒 Secure password hashing
-
-## 👥 Team
-
-- **Developer**: Phi Dinh
-- **Project Type**: LMS Education Platform
-- **Tech Stack**: Flutter + Node.js + PostgreSQL
-
-## 📞 Support
-
-Nếu gặp vấn đề trong quá trình setup hoặc development:
-
-1. Kiểm tra server APIs đang chạy đúng port
-2. Verify database connection
-3. Check Flutter dependencies
-4. Review console logs cho debug info
-
----
-
-**🎓 Happy Learning & Teaching! 🚀**
+### **Teacher Dashboard Features**
+- 🏠 **Home Screen
