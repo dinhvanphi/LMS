@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('../config/db.config');
 
-const Teacher = sequelize.define('Teacher', {
+const Student = sequelize.define('Student', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -40,47 +40,63 @@ const Teacher = sequelize.define('Teacher', {
     type: DataTypes.STRING,
     defaultValue: null
   },
-  specialization: {
-    type: DataTypes.STRING,
+  dateOfBirth: {
+    type: DataTypes.DATEONLY,
     allowNull: true
   },
-  experience: {
-    type: DataTypes.INTEGER,
-    defaultValue: 0,
-    validate: {
-      min: 0
-    }
+  gender: {
+    type: DataTypes.ENUM('male', 'female', 'other'),
+    allowNull: true
   },
-  bio: {
+  address: {
     type: DataTypes.TEXT,
     allowNull: true
   },
-  qualification: {
+  school: {
     type: DataTypes.STRING,
     allowNull: true
   },
-  isVerified: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false
+  grade: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  parentName: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  parentPhone: {
+    type: DataTypes.STRING,
+    allowNull: true
+  },
+  parentEmail: {
+    type: DataTypes.STRING,
+    allowNull: true,
+    validate: {
+      isEmail: true
+    }
   },
   isActive: {
     type: DataTypes.BOOLEAN,
     defaultValue: true
   },
-  rating: {
-    type: DataTypes.DECIMAL(3, 2),
-    defaultValue: 0.00,
-    validate: {
-      min: 0,
-      max: 5
-    }
+  isVerified: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
   },
-  totalStudents: {
+  enrollmentDate: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  totalCourses: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0
+  },
+  completedCourses: {
     type: DataTypes.INTEGER,
     defaultValue: 0
   }
 }, {
-  tableName: 'teachers',
+  tableName: 'students',
   timestamps: true,
   indexes: [
     {
@@ -88,12 +104,15 @@ const Teacher = sequelize.define('Teacher', {
       fields: ['email']
     },
     {
-      fields: ['specialization']
+      fields: ['grade']
     },
     {
-      fields: ['isVerified']
+      fields: ['isActive']
+    },
+    {
+      fields: ['enrollmentDate']
     }
   ]
 });
 
-module.exports = Teacher;
+module.exports = Student;
