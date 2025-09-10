@@ -2,7 +2,7 @@ const bcrypt = require('bcryptjs');
 const { sequelize } = require('../config/db.config');
 const User = require('../models/userModel');
 const Teacher = require('../models/Teacher');
-const Student = require('../models/StudentModel');
+const Student = require('../models/Student');
 
 exports.register = async (data) => {
   const { email, password, first_name, last_name, phone, avatar_url } = data;
