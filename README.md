@@ -21,7 +21,7 @@ Hệ thống quản lý học tập bao gồm 2 ứng dụng riêng biệt cho *
 ```
 LMS/
 ├── Teacher/
-│   └── edvora/                    # Flutter Teacher App
+│   └── edvora/                    # Flutter Teacher Application 
 │       ├── lib/
 │       │   ├── screens/
 │       │   │   ├── loginScreen.dart
